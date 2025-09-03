@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import java.util.Arrays;
+
 
 public class Twin {
     public static void main(String[] args) {
@@ -11,33 +13,59 @@ public class Twin {
         System.out.println("Hello I am Twin\nNice to meet you\nWhat can I do for you?");
         Scanner input=new Scanner(System.in);
         System.out.println();
-        String userTask = input.nextLine();
-        String [] listOfUserTasks= new String [100];
-        int numberTasksInlist=0;
+        String userText = input.nextLine();
+        Task[] listOfUserTasks= new Task[100];
+        int numberOfTasksInlist=0;
 
-        while (!userTask.equalsIgnoreCase("bye")) {
-            if (userTask.equalsIgnoreCase("list")) {
-                for (int x = 0; x < numberTasksInlist; x++) {
-                    System.out.println(listOfUserTasks[x]);
+        while (!userText.equalsIgnoreCase("bye")) {
+            String[] inputParts;
+            if (userText.equalsIgnoreCase("list")) {
+                for (int x = 0; x < numberOfTasksInlist; x++) {
+                    Task taskPrinted = listOfUserTasks[x];
+                    System.out.println(taskPrinted.getStatusIcon());
                 }
-                System.out.println();
-                userTask = input.nextLine();
-            } else if (userTask.toLowerCase().startsWith("mark")) {
-                String[] parts = userTask.split(" ");
-                int itemNumber = Integer.parseInt(parts[1]);
-                listOfUserTasks[itemNumber-1]="[X]"+listOfUserTasks[itemNumber-1].split(" ")[2]+" "+listOfUserTasks[itemNumber-1].split(" ")[3];
-                System.out.println("Nice I have marked item number "+itemNumber+"\n"+listOfUserTasks[itemNumber-1]);
-                System.out.println();
-                userTask=input.nextLine();
+            } else if (userText.toLowerCase().startsWith("mark")) {
+                inputParts = userText.split(" ");
+                int itemNumber = Integer.parseInt(inputParts[1]);
+                Task taskMarked = listOfUserTasks[itemNumber - 1];
+                taskMarked.markAsDone();
+                System.out.println("Nice I have marked item number " + itemNumber + "\n" + taskMarked.getStatusIcon());
+
+            } else if (userText.toLowerCase().startsWith("deadline")) {
+                inputParts = userText.split(" ");
+                String taskDescription = inputParts[1] + " " + inputParts[2];
+                String by = inputParts[4];
+                Deadline deadline = new Deadline(taskDescription,by);
+                listOfUserTasks[numberOfTasksInlist] = deadline;
+                numberOfTasksInlist += 1;
+                System.out.println(deadline);
+
+            } else if (userText.toLowerCase().startsWith("todo")) {
+                inputParts = userText.split(" ");
+                String taskDescription = inputParts[1] + " " + inputParts[2];
+                Todo todo = new Todo(taskDescription);
+                listOfUserTasks[numberOfTasksInlist] = todo;
+                numberOfTasksInlist += 1;
+                System.out.println(todo);
+
+            } else if (userText.toLowerCase().startsWith("event")) {
+                inputParts = userText.split(" ");
+                String taskDescription = inputParts[1] + " " + inputParts[2];
+                String from = inputParts[4] + " " + inputParts[5];
+                String to = inputParts[7];
+                Event event = new Event(taskDescription, from, to);
+                listOfUserTasks[numberOfTasksInlist] = event;
+                numberOfTasksInlist += 1;
+                System.out.println(event);
 
             } else {
-                System.out.println("added: " + userTask);
-                listOfUserTasks[numberTasksInlist] = ("[ ] "+userTask);
-                numberTasksInlist += 1;
-                System.out.println();
-                userTask = input.nextLine();
+                System.out.println("added: " + userText);
+                Task userTask = new Task(userText);
+                listOfUserTasks[numberOfTasksInlist] = userTask;
+                numberOfTasksInlist += 1;
             }
-
+            System.out.println();
+            userText = input.nextLine();
 
 
         }
