@@ -11,41 +11,37 @@ public class Twin {
         System.out.println("Hello I am Twin\nNice to meet you\nWhat can I do for you?");
         Scanner input=new Scanner(System.in);
         System.out.println();
-        String userText = input.nextLine();
-        String [] listOfUserTexts= new String [100];
-        int i=0;
+        String userTask = input.nextLine();
+        String [] listOfUserTasks= new String [100];
+        int numberTasksInlist=0;
 
-        while (!userText.equalsIgnoreCase("bye")) {
-            if (userText.equalsIgnoreCase("list")) {
-                for (int x = 0; x < i; x++) {
-                    System.out.println(listOfUserTexts[x]);
+        while (!userTask.equalsIgnoreCase("bye")) {
+            if (userTask.equalsIgnoreCase("list")) {
+                for (int x = 0; x < numberTasksInlist; x++) {
+                    System.out.println(listOfUserTasks[x]);
                 }
                 System.out.println();
-                userText = input.nextLine();
-            }
-            else if (userText.toLowerCase().startsWith("mark")) {
-                String[] parts = userText.split(" ");
+                userTask = input.nextLine();
+            } else if (userTask.toLowerCase().startsWith("mark")) {
+                String[] parts = userTask.split(" ");
                 int itemNumber = Integer.parseInt(parts[1]);
-                listOfUserTexts[itemNumber-1]="[X]"+listOfUserTexts[itemNumber-1].split(" ")[2]+" "+listOfUserTexts[itemNumber-1].split(" ")[3];
-                System.out.println("Nice I have marked item number "+itemNumber+"\n"+listOfUserTexts[itemNumber-1]);
+                listOfUserTasks[itemNumber-1]="[X]"+listOfUserTasks[itemNumber-1].split(" ")[2]+" "+listOfUserTasks[itemNumber-1].split(" ")[3];
+                System.out.println("Nice I have marked item number "+itemNumber+"\n"+listOfUserTasks[itemNumber-1]);
                 System.out.println();
-                userText=input.nextLine();
+                userTask=input.nextLine();
 
-
-
-            }
-
-            else {
-                System.out.println("added: " + userText);
-                listOfUserTexts[i] = ("[ ] "+userText);
-                i += 1;
+            } else {
+                System.out.println("added: " + userTask);
+                listOfUserTasks[numberTasksInlist] = ("[ ] "+userTask);
+                numberTasksInlist += 1;
                 System.out.println();
-                userText = input.nextLine();
+                userTask = input.nextLine();
             }
 
 
 
         }
+
         System.out.println("Bye for now!");
     }
 }
