@@ -15,6 +15,10 @@ public class Task {
         this.isDone = true;
     }
 
+    public void unMark() {
+        this.isDone = false;
+    }
+
     public String getStatusIcon() {
         return (isDone ? this.taskNumber +  ". " + "[X] " + this.description : this.taskNumber + ". " + "  " + this.description); // mark done task with X
     }

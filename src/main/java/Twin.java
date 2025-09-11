@@ -31,6 +31,14 @@ public class Twin {
                 taskMarked.markAsDone();
                 System.out.println("Nice I have marked item number " + itemNumber + "\n" + taskMarked.getStatusIcon());
 
+            } else if (userText.toLowerCase().startsWith("unmark")) {
+                inputParts = userText.split(" ");
+                int itemNumber = Integer.parseInt(inputParts[1]);
+                Task taskUnmarked = listOfUserTasks[itemNumber - 1];
+                taskUnmarked.unMark();
+                System.out.println("Nice I have marked item number " + itemNumber + "\n" + taskUnmarked.getStatusIcon());
+
+
             } else if (userText.toLowerCase().startsWith("deadline")) {
                 inputParts = userText.split(" ");
                 String taskDescription = inputParts[1] + " " + inputParts[2];
