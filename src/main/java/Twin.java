@@ -50,11 +50,15 @@ public class Twin {
 
             } else if (userText.toLowerCase().startsWith("todo")) {
                 inputParts = userText.split(" ");
-                String taskDescription = inputParts[1] + " " + inputParts[2];
-                Todo todo = new Todo(taskDescription);
-                listOfUserTasks[numberOfTasksInlist] = todo;
-                numberOfTasksInlist += 1;
-                System.out.println(todo);
+                if (inputParts.length >= 2) {
+                    String taskDescription = inputParts[1] + " " + inputParts[2];
+                    Todo todo = new Todo(taskDescription);
+                    listOfUserTasks[numberOfTasksInlist] = todo;
+                    numberOfTasksInlist += 1;
+                    System.out.println(todo);
+                } else {
+                    System.out.println("Error: todo cannot have an empty task!");
+                }
 
             } else if (userText.toLowerCase().startsWith("event")) {
                 inputParts = userText.split(" ");
