@@ -70,6 +70,9 @@ public class Twin {
                 numberOfTasksInlist += 1;
                 System.out.println(event);
 
+            } else if (userText.toLowerCase().startsWith("blah")) {
+                System.out.println("I am sorry I don't understand that. Please try again!");
+
             } else {
                 System.out.println("added: " + userText);
                 Task userTask = new Task(userText);
