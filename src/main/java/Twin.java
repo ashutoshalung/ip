@@ -31,6 +31,14 @@ public class Twin {
                 taskMarked.markAsDone();
                 System.out.println("Nice I have marked item number " + itemNumber + "\n" + taskMarked.getStatusIcon());
 
+            } else if (userText.toLowerCase().startsWith("unmark")) {
+                inputParts = userText.split(" ");
+                int itemNumber = Integer.parseInt(inputParts[1]);
+                Task taskUnmarked = listOfUserTasks[itemNumber - 1];
+                taskUnmarked.unMark();
+                System.out.println("Nice I have marked item number " + itemNumber + "\n" + taskUnmarked.getStatusIcon());
+
+
             } else if (userText.toLowerCase().startsWith("deadline")) {
                 inputParts = userText.split(" ");
                 String taskDescription = inputParts[1] + " " + inputParts[2];
@@ -42,11 +50,15 @@ public class Twin {
 
             } else if (userText.toLowerCase().startsWith("todo")) {
                 inputParts = userText.split(" ");
-                String taskDescription = inputParts[1] + " " + inputParts[2];
-                Todo todo = new Todo(taskDescription);
-                listOfUserTasks[numberOfTasksInlist] = todo;
-                numberOfTasksInlist += 1;
-                System.out.println(todo);
+                if (inputParts.length >= 2) {
+                    String taskDescription = inputParts[1] + " " + inputParts[2];
+                    Todo todo = new Todo(taskDescription);
+                    listOfUserTasks[numberOfTasksInlist] = todo;
+                    numberOfTasksInlist += 1;
+                    System.out.println(todo);
+                } else {
+                    System.out.println("Error: todo cannot have an empty task!");
+                }
 
             } else if (userText.toLowerCase().startsWith("event")) {
                 inputParts = userText.split(" ");
@@ -57,6 +69,9 @@ public class Twin {
                 listOfUserTasks[numberOfTasksInlist] = event;
                 numberOfTasksInlist += 1;
                 System.out.println(event);
+
+            } else if (userText.toLowerCase().startsWith("blah")) {
+                System.out.println("I am sorry I don't understand that. Please try again!");
 
             } else {
                 System.out.println("added: " + userText);
