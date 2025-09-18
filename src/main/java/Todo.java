@@ -6,11 +6,16 @@ public class Todo extends Task {
 
     @Override
     public String getStatusIcon() {
-        return (isDone ? this.taskNumber +  ". " + "[T]" + "[X]" + this.description : "[T]" + super.toString());
+        return "[T]" + super.getStatusIcon();
+    }
+
+    @Override
+    public String toFileString() {
+        return "T | " + isDone + " | " + description;
     }
 
     @Override
     public String toString() {
-        return "Got it. I have added this task: \n [T]" + super.toString() + "\nNow you have " + Task.numberOfTasks + " tasks in the list";
+        return "Got it. I've added this task:\n [T]" + super.getStatusIcon();
     }
 }

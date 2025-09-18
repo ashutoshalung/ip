@@ -1,90 +1,178 @@
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Arrays;
+import java.io.File;
+import java.io.FileWriter;
 
 
 public class Twin {
+    public static void writeToFile(String filepath, String textToAdd) {
+        try {
+            FileWriter fw = new FileWriter(filepath);
+            fw.write(textToAdd);
+            fw.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void main(String[] args) {
-        String logo = " ____        _        \n"
-                + "|  _ \\ _   _| | _____ \n"
-                + "| | | | | | | |/ / _ \\\n"
-                + "| |_| | |_| |   <  __/\n"
-                + "|____/ \\__,_|_|\\_\\___|\n";
-        System.out.println("Hello from\n" + logo);
-        System.out.println("Hello I am Twin\nNice to meet you\nWhat can I do for you?");
-        Scanner input=new Scanner(System.in);
-        System.out.println();
-        String userText = input.nextLine();
-        Task[] listOfUserTasks= new Task[100];
-        int numberOfTasksInlist=0;
+        File f = new File("data/twin.txt");
+        Scanner s;
+        try {
+            s = new Scanner(f);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        ArrayList<Task> listOfUserTasks = new ArrayList<>();
+        while (s.hasNext()) {
+            String line = s.nextLine();
+            String[] parts = line.split("\\| "); // split by " | "
+            String type = parts[0];
+            String isDone = parts[1];
+            String description = parts[2];
 
-        while (!userText.equalsIgnoreCase("bye")) {
-            String[] inputParts;
-            if (userText.equalsIgnoreCase("list")) {
-                for (int x = 0; x < numberOfTasksInlist; x++) {
-                    Task taskPrinted = listOfUserTasks[x];
-                    System.out.println(taskPrinted.getStatusIcon());
-                }
-            } else if (userText.toLowerCase().startsWith("mark")) {
-                inputParts = userText.split(" ");
-                int itemNumber = Integer.parseInt(inputParts[1]);
-                Task taskMarked = listOfUserTasks[itemNumber - 1];
-                taskMarked.markAsDone();
-                System.out.println("Nice I have marked item number " + itemNumber + "\n" + taskMarked.getStatusIcon());
-
-            } else if (userText.toLowerCase().startsWith("unmark")) {
-                inputParts = userText.split(" ");
-                int itemNumber = Integer.parseInt(inputParts[1]);
-                Task taskUnmarked = listOfUserTasks[itemNumber - 1];
-                taskUnmarked.unMark();
-                System.out.println("Nice I have marked item number " + itemNumber + "\n" + taskUnmarked.getStatusIcon());
-
-
-            } else if (userText.toLowerCase().startsWith("deadline")) {
-                inputParts = userText.split(" ");
-                String taskDescription = inputParts[1] + " " + inputParts[2];
-                String by = inputParts[4];
-                Deadline deadline = new Deadline(taskDescription,by);
-                listOfUserTasks[numberOfTasksInlist] = deadline;
-                numberOfTasksInlist += 1;
-                System.out.println(deadline);
-
-            } else if (userText.toLowerCase().startsWith("todo")) {
-                inputParts = userText.split(" ");
-                if (inputParts.length >= 2) {
-                    String taskDescription = inputParts[1] + " " + inputParts[2];
-                    Todo todo = new Todo(taskDescription);
-                    listOfUserTasks[numberOfTasksInlist] = todo;
-                    numberOfTasksInlist += 1;
-                    System.out.println(todo);
-                } else {
-                    System.out.println("Error: todo cannot have an empty task!");
-                }
-
-            } else if (userText.toLowerCase().startsWith("event")) {
-                inputParts = userText.split(" ");
-                String taskDescription = inputParts[1] + " " + inputParts[2];
-                String from = inputParts[4] + " " + inputParts[5];
-                String to = inputParts[7];
-                Event event = new Event(taskDescription, from, to);
-                listOfUserTasks[numberOfTasksInlist] = event;
-                numberOfTasksInlist += 1;
-                System.out.println(event);
-
-            } else if (userText.toLowerCase().startsWith("blah")) {
-                System.out.println("I am sorry I don't understand that. Please try again!");
-
-            } else {
-                System.out.println("added: " + userText);
-                Task userTask = new Task(userText);
-                listOfUserTasks[numberOfTasksInlist] = userTask;
-                numberOfTasksInlist += 1;
+            Task task = null;
+            switch (type) {
+            case "T":
+                task = new Todo(description);
+                break;
+            case "D":
+                String by = parts[3];
+                task = new Deadline(description, by);
+                break;
+            case "E":
+                String from = parts[3];
+                String to = parts[4];
+                task = new Event(description, from, to);
+                break;
             }
-            System.out.println();
-            userText = input.nextLine();
+            if (isDone.equals("1")) {
+                task.markAsDone();
+            }
 
-
+            listOfUserTasks.add(task);
         }
 
-        System.out.println("Bye for now!");
+        String logo = " ____        _        \n" + "|  _ \\ _   _| | _____ \n" + "| | | | | | | |/ / _ \\\n" + "| |_| | |_| |   <  __/\n" + "|____/ \\__,_|_|\\_\\___|\n";
+        System.out.println("Hello from\n" + logo);
+        System.out.println("Hello I am Twin\nNice to meet you\nWhat can I do for you?");
+        Scanner input = new Scanner(System.in); //one time only, create the scanner input.
+        System.out.println();
+        String userText = input.nextLine();
+
+
+
+        while (!userText.equalsIgnoreCase("bye")) {
+            String[] inputParts = userText.split(" ");
+            String command = inputParts[0].toLowerCase();
+            try {
+                if (inputParts.length == 1 && !command.equals("list")) { //handle blah and incorrect one word statements
+                    throw new DukeException("I am sorry I do not understand that.");
+
+                }
+                switch (command) {
+                case "list":
+                    for (Task t : listOfUserTasks) {
+                        System.out.println(t.getStatusIcon());
+                    }
+                    break;
+                case "mark":
+                    int itemNumber = Integer.parseInt(inputParts[1]);
+                    Task taskMarked = listOfUserTasks.get(itemNumber - 1);
+                    taskMarked.markAsDone();
+                    System.out.println("Nice I have marked item number " + itemNumber + "\n" + taskMarked.getStatusIcon());
+                    break;
+
+                case "unmark":
+
+                    itemNumber = Integer.parseInt(inputParts[1]);
+                    Task taskUnmarked = listOfUserTasks.get(itemNumber - 1);
+                    taskUnmarked.unMark();
+                    System.out.println("Nice I have marked item number " + itemNumber + "\n" + taskUnmarked.getStatusIcon());
+
+                    break;
+
+
+                case "deadline":
+
+                    String taskDescription = inputParts[1] + " " + inputParts[2];
+                    String by = inputParts[4];
+                    Deadline deadline = new Deadline(taskDescription, by);
+                    listOfUserTasks.add(deadline);
+                    Task.numberOfTasks += 1;
+                    System.out.println(deadline);
+
+                    break;
+
+                case "todo":
+                    taskDescription = inputParts[1] + " " + inputParts[2];
+                    Todo todo = new Todo(taskDescription);
+                    listOfUserTasks.add(todo);
+                    Task.numberOfTasks += 1;
+                    System.out.println(todo);
+                    System.out.println();
+
+                    break;
+
+                case "event":
+                    // join everything after "event" into a single string
+                    String fullInput = userText.substring(6).trim(); // remove "event "
+
+                    // find the "from" and "to" positions
+                    int fromIndex = fullInput.indexOf(" from ");
+                    int toIndex = fullInput.indexOf(" to ", fromIndex);
+
+                    if (fromIndex == -1 || toIndex == -1) {
+                        System.out.println("Invalid event format. Use: event <description> from <start> to <end>");
+                        break;
+                    }
+
+                    // extract parts
+                    taskDescription = fullInput.substring(0, fromIndex);
+                    String from = fullInput.substring(fromIndex + 6, toIndex); // +6 to skip " from "
+                    String to = fullInput.substring(toIndex + 4); // +4 to skip " to "
+
+                    Event event = new Event(taskDescription, from, to);
+                    listOfUserTasks.add(event);
+                    Task.numberOfTasks += 1;
+                    System.out.println(event);
+                    break;
+                case "delete":
+                    int itemNumberToBeDeleted = Integer.parseInt(inputParts[1]);
+                    System.out.println("Noted I will delete this task: " + listOfUserTasks.get(itemNumberToBeDeleted));
+                    listOfUserTasks.remove(itemNumberToBeDeleted);
+                    System.out.println("Now you have " + listOfUserTasks.toArray().length + "tasks.");
+                    break;
+
+
+                default:
+                    System.out.println("added: " + userText);
+                    Task userTask = new Task(userText);
+                    listOfUserTasks.add(userTask);
+                    Task.numberOfTasks += 1;
+                    break;
+
+                }
+            } catch (DukeException e) {
+                System.out.println(e.getMessage());
+
+            } catch (NumberFormatException e) {
+                System.out.println("Item number must be an integer!");
+            } catch (ArrayIndexOutOfBoundsException e) {
+                System.out.println("Task cannot be blank!");
+            } finally {
+                System.out.println();
+                userText = input.nextLine();
+                }
+            }
+            System.out.println("Bye for now!");
+            StringBuilder outputToFile = new StringBuilder();
+            for (Task t : listOfUserTasks) {
+                outputToFile.append(t.toFileString()).append("\n");
+            }
+            writeToFile("data/twin.txt", outputToFile.toString());
+        }
     }
-}

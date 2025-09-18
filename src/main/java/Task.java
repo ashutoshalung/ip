@@ -1,32 +1,27 @@
 public class Task {
     protected String description;
-    protected boolean isDone;
-    protected int taskNumber;
-    protected static int numberOfTasks=0;
+    protected int isDone; // 0 = not done, 1 = done
+    protected static int numberOfTasks = 0;
 
     public Task(String description) {
         this.description = description;
-        this.isDone = false;
-        this.taskNumber=numberOfTasks+1;
-        numberOfTasks+=1;
+        this.isDone = 0;
+        numberOfTasks++;
     }
 
-    public void markAsDone() {
-        this.isDone = true;
-    }
-
-    public void unMark() {
-        this.isDone = false;
-    }
+    public void markAsDone() { this.isDone = 1; }
+    public void unMark() { this.isDone = 0; }
 
     public String getStatusIcon() {
-        return (isDone ? this.taskNumber +  ". " + "[X] " + this.description : this.taskNumber + ". " + "  " + this.description); // mark done task with X
+        return "[" + (isDone == 1 ? "X" : " ") + "] " + description;
     }
 
     @Override
     public String toString() {
-        return ("[ ]" + this.description);
+        return getStatusIcon();
+    }
+
+    public String toFileString() {
+        return "T | " + isDone + " | " + description;
     }
 }
-
-
