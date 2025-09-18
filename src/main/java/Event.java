@@ -10,7 +10,7 @@ public class Event extends Task {
 
     @Override
     public String getStatusIcon() {
-        return (isDone ? this.taskNumber +  ". " + "[E]" + "[X]" + this.description + " (from: " + from + "to: " + to + ")": "[E]" + super.toString() + " (from: " + from + "to: " + to + ")");
+        return (isDone ? this.taskNumber +  ". " + "[E]" + "[X]" + this.description + " (from: " + from + "to: " + to + ")": "[E]" + super.toString() + " (from : " + from + "to : " + to + ")");
     }
 
     @Override
