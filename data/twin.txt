@@ -1,0 +1,7 @@
+T | 0 | 4 pm
+T | 0 | 4 pm
+T | 0 | 4 pm
+T | 0 | 4 pm
+E | 0 | Ashutosh Alung attend CS2113 lecture Friday 19 Sep 2025 | 4 | 6 pm
+E | 0 | Ashutosh Alung attend CS2113 lecture Friday 19 Sep 2025 | 4pm | 6pm
+E | 0 | Ashutosh Alung attend CS2113 lecture 19 Sep 2025 | 4 | 6 pm

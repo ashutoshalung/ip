@@ -29,7 +29,7 @@ public class Twin {
         ArrayList<Task> listOfUserTasks = new ArrayList<>();
         while (s.hasNext()) {
             String line = s.nextLine();
-            String[] parts = line.split("//| "); // split by " | "
+            String[] parts = line.split("\\| "); // split by " | "
             String type = parts[0];
             String isDone = parts[1];
             String description = parts[2];
@@ -59,7 +59,7 @@ public class Twin {
         String logo = " ____        _        \n" + "|  _ \\ _   _| | _____ \n" + "| | | | | | | |/ / _ \\\n" + "| |_| | |_| |   <  __/\n" + "|____/ \\__,_|_|\\_\\___|\n";
         System.out.println("Hello from\n" + logo);
         System.out.println("Hello I am Twin\nNice to meet you\nWhat can I do for you?");
-        Scanner input = new Scanner(System.in); //one time only, create the scanner input. 
+        Scanner input = new Scanner(System.in); //one time only, create the scanner input.
         System.out.println();
         String userText = input.nextLine();
 
@@ -118,20 +118,34 @@ public class Twin {
                     break;
 
                 case "event":
-                    taskDescription = inputParts[1] + " " + inputParts[2];
-                    String from = inputParts[4] + " " + inputParts[5];
-                    String to = inputParts[7];
+                    // join everything after "event" into a single string
+                    String fullInput = userText.substring(6).trim(); // remove "event "
+
+                    // find the "from" and "to" positions
+                    int fromIndex = fullInput.indexOf(" from ");
+                    int toIndex = fullInput.indexOf(" to ", fromIndex);
+
+                    if (fromIndex == -1 || toIndex == -1) {
+                        System.out.println("Invalid event format. Use: event <description> from <start> to <end>");
+                        break;
+                    }
+
+                    // extract parts
+                    taskDescription = fullInput.substring(0, fromIndex);
+                    String from = fullInput.substring(fromIndex + 6, toIndex); // +6 to skip " from "
+                    String to = fullInput.substring(toIndex + 4); // +4 to skip " to "
+
                     Event event = new Event(taskDescription, from, to);
                     listOfUserTasks.add(event);
                     Task.numberOfTasks += 1;
                     System.out.println(event);
-
                     break;
                 case "delete":
                     int itemNumberToBeDeleted = Integer.parseInt(inputParts[1]);
                     System.out.println("Noted I will delete this task: " + listOfUserTasks.get(itemNumberToBeDeleted));
                     listOfUserTasks.remove(itemNumberToBeDeleted);
                     System.out.println("Now you have " + listOfUserTasks.toArray().length + "tasks.");
+                    break;
 
 
                 default:
