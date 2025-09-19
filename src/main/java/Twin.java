@@ -19,7 +19,7 @@ public class Twin {
     }
 
     public static void main(String[] args) {
-        File f = new File("data/twin.txt");
+        File f = new File("C:\\Users\\ashut\\OneDrive\\Desktop\\NUS\\ip\\data\\twin.txt");
         Scanner s;
         try {
             s = new Scanner(f);
@@ -173,6 +173,6 @@ public class Twin {
             for (Task t : listOfUserTasks) {
                 outputToFile.append(t.toFileString()).append("\n");
             }
-            writeToFile("data/twin.txt", outputToFile.toString());
+            writeToFile("C:\\Users\\ashut\\OneDrive\\Desktop\\NUS\\ip\\data\\twin.txt", outputToFile.toString());
         }
     }
