@@ -1,7 +1,19 @@
-// Parser.java
+/**
+ * The Parser class is responsible for interpreting raw user input strings
+ * and converting them into corresponding {@link Command} objects.
+ * <p>
+ * It validates the syntax of user commands and throws a {@link TwinException}
+ * when the command is invalid or missing arguments.
+ */
 public class Parser {
 
-    // static parse helper — throws TwinException for user-facing errors
+    /**
+     * Parses a user input string into a {@link Command} object.
+     *
+     * @param userText the raw input string entered by the user
+     * @return the corresponding {@link Command} object for execution
+     * @throws TwinException if the input is invalid, unknown, or missing arguments
+     */
     public static Command parse(String userText) throws TwinException {
         if (userText == null || userText.trim().isEmpty()) {
             throw new TwinException("Please enter a valid input! Input cannot be blank!");
@@ -16,7 +28,6 @@ public class Parser {
         switch (command) {
         case "list":
             return new ListCommand();
-
 
         case "mark":
             if (args.isEmpty()) {
@@ -85,6 +96,12 @@ public class Parser {
         case "exit":
             Command c = new ExitCommand();
             return c;
+
+        case "find":
+            if (args.isEmpty()) {
+                throw new TwinException("Please provide a keyword to find!");
+            }
+            return new FindCommand(args);
 
         default:
             throw new TwinException("Unknown command: " + command);

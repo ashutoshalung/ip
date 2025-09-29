@@ -6,14 +6,30 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Handles loading and saving of tasks to a file.
+ * Responsible for file I/O and translating between Task objects and file format.
+ */
 public class Storage {
+    /** Path to the file storing tasks */
     private String filePath;
 
+    /**
+     * Constructs a Storage object with the specified file path.
+     *
+     * @param filePath the path to the file used for saving/loading tasks
+     */
     public Storage(String filePath) {
         this.filePath = filePath;
     }
 
-    // Load tasks from file into an ArrayList<Task>
+    /**
+     * Loads tasks from the file into an ArrayList of Task objects.
+     * Creates the file and directories if they do not exist.
+     *
+     * @return list of tasks loaded from file (empty if file is missing or empty)
+     * @throws TwinException if there is an error reading from the file
+     */
     public ArrayList<Task> load() throws TwinException {
         ArrayList<Task> listOfUserTasks = new ArrayList<>();
         File file = new File(filePath);
@@ -74,7 +90,12 @@ public class Storage {
         return listOfUserTasks;
     }
 
-    // Save the TaskList to file
+    /**
+     * Writes all tasks from a TaskList to the file, overwriting existing content.
+     *
+     * @param listOfUserTasks the TaskList to save
+     * @throws TwinException if there is an error writing to the file
+     */
     public void writeToFile(TaskList listOfUserTasks) throws TwinException {
         try (FileWriter fw = new FileWriter(this.filePath, false)) { // overwrite
             for (Task t : listOfUserTasks.getAllTasks()) {
