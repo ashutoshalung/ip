@@ -1,3 +1,5 @@
+import task.Task;
+
 public class Deadline extends Task {
     protected String by;
 
@@ -18,6 +20,6 @@ public class Deadline extends Task {
 
     @Override
     public String toString() {
-        return "Got it. I've added this task:\n [D]" + super.getStatusIcon() + " (by: " + by + ")";
+        return "[D]" + super.getStatusIcon() + " (by: " + by + ")";
     }
 }

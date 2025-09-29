@@ -1,3 +1,5 @@
+import task.Task;
+
 public class Event extends Task {
     protected String from;
     protected String to;
@@ -20,6 +22,6 @@ public class Event extends Task {
 
     @Override
     public String toString() {
-        return "Got it. I've added this task:\n [E]" + super.getStatusIcon() + " (from: " + from + " to: " + to + ")";
+        return "[E]" + super.getStatusIcon() + " (from: " + from + " to: " + to + ")";
     }
 }

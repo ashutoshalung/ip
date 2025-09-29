@@ -1,3 +1,5 @@
+import task.Task;
+
 public class Todo extends Task {
 
     public Todo(String description) {
@@ -16,6 +18,6 @@ public class Todo extends Task {
 
     @Override
     public String toString() {
-        return "Got it. I've added this task:\n [T]" + super.getStatusIcon();
+        return "[T]" + super.getStatusIcon();
     }
 }

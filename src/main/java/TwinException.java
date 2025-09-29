@@ -1,6 +1,6 @@
-public class DukeException extends Exception{
+public class TwinException extends Exception{
 
-    public DukeException(String message) {
+    public TwinException(String message) {
         super(message);
     }
 

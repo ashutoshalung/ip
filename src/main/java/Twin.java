@@ -1,178 +1,175 @@
-import java.io.FileNotFoundException;
+import task.Task;
+import ui.Ui;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.Arrays;
-import java.io.File;
-import java.io.FileWriter;
-
+import task.TaskList;
 
 public class Twin {
-    public static void writeToFile(String filepath, String textToAdd) {
-        try {
-            FileWriter fw = new FileWriter(filepath);
-            fw.write(textToAdd);
-            fw.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    private static final String DATA_DIR = "./data";
+    private static final String DATA_FILE = DATA_DIR + "/twin.txt";
+    private static File filePath;
+
+    public Twin() throws IOException {
+    }
+
+    public static void ensureDataDirExists() {
+        File dir = new File(DATA_DIR);
+        if (!dir.exists()) {
+            dir.mkdirs();
         }
     }
 
     public static void main(String[] args) {
-        File f = new File("C:\\Users\\ashut\\OneDrive\\Desktop\\NUS\\ip\\data\\twin.txt");
-        Scanner s;
+        filePath = new File(DATA_FILE);
+        Ui ui = new Ui();
+        ui.showWelcome();
+
+        ensureDataDirExists();
+
+        String userText = ui.readCommand();
+        Storage storage = new Storage(DATA_FILE);
+        TaskList listOfUserTasks = new TaskList();
+        ArrayList<Task> tasks = listOfUserTasks.getAllTasks();
         try {
-            s = new Scanner(f);
-        } catch (FileNotFoundException e) {
+            tasks = storage.load();
+        } catch (TwinException e) {
             throw new RuntimeException(e);
         }
-        ArrayList<Task> listOfUserTasks = new ArrayList<>();
-        while (s.hasNext()) {
-            String line = s.nextLine();
-            String[] parts = line.split("\\| "); // split by " | "
-            String type = parts[0];
-            String isDone = parts[1];
-            String description = parts[2];
-
-            Task task = null;
-            switch (type) {
-            case "T":
-                task = new Todo(description);
-                break;
-            case "D":
-                String by = parts[3];
-                task = new Deadline(description, by);
-                break;
-            case "E":
-                String from = parts[3];
-                String to = parts[4];
-                task = new Event(description, from, to);
-                break;
-            }
-            if (isDone.equals("1")) {
-                task.markAsDone();
-            }
-
-            listOfUserTasks.add(task);
-        }
-
-        String logo = " ____        _        \n" + "|  _ \\ _   _| | _____ \n" + "| | | | | | | |/ / _ \\\n" + "| |_| | |_| |   <  __/\n" + "|____/ \\__,_|_|\\_\\___|\n";
-        System.out.println("Hello from\n" + logo);
-        System.out.println("Hello I am Twin\nNice to meet you\nWhat can I do for you?");
-        Scanner input = new Scanner(System.in); //one time only, create the scanner input.
-        System.out.println();
-        String userText = input.nextLine();
-
+//        ArrayList<Task> listOfUserTasks = new ArrayList<>();
 
 
         while (!userText.equalsIgnoreCase("bye")) {
-            String[] inputParts = userText.split(" ");
-            String command = inputParts[0].toLowerCase();
-            try {
-                if (inputParts.length == 1 && !command.equals("list")) { //handle blah and incorrect one word statements
-                    throw new DukeException("I am sorry I do not understand that.");
 
+            String[] inputParts = null;
+            String command = null;
+            try {
+                inputParts = userText.split(" ");
+                if (inputParts.length >= 1) {
+
+                    command = inputParts[0].toLowerCase();
+                } else {
+                    throw new TwinException("Please enter a valid input!");
                 }
+            } catch (TwinException d) {
+                Ui.printBox(d.getMessage());
+            } catch (ArrayIndexOutOfBoundsException e) {
+                Ui.printBox("Again, please enter a valid input!");
+            }
+
+
+            try {
                 switch (command) {
                 case "list":
-                    for (Task t : listOfUserTasks) {
-                        System.out.println(t.getStatusIcon());
+                    for (Task t : tasks) {
+                        Ui.printBox(t.getTaskNumber() + " " + t.getStatusIcon());
                     }
                     break;
                 case "mark":
-                    int itemNumber = Integer.parseInt(inputParts[1]);
-                    Task taskMarked = listOfUserTasks.get(itemNumber - 1);
-                    taskMarked.markAsDone();
-                    System.out.println("Nice I have marked item number " + itemNumber + "\n" + taskMarked.getStatusIcon());
-                    break;
+
+                    int itemNumber = 0;
+                    try {
+                        if (inputParts.length > 1) {
+                            itemNumber = Integer.parseInt(inputParts[1]);
+                            Task taskMarked = listOfUserTasks.get(itemNumber - 1);
+                            taskMarked.markAsDone();
+                            Ui.printBox("Nice I have marked item number " + itemNumber + "\n" + taskMarked.getTaskNumber()
+                                    + " " + taskMarked.getStatusIcon());
+                            break;
+                        } else {
+                            throw new TwinException("Please add what item number to mark.");
+                        }
+                    } catch (TwinException e) {
+                        Ui.printBox(e.getMessage());
+                    } catch (NumberFormatException e) {
+                        Ui.printBox("Please give a valid number to mark.");
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        Ui.printBox("Please give me an item number that lies within the list!");
+                    } catch (NullPointerException e) {
+                        Ui.printBox("Please give me a valid number to mark!");
+                    }
 
                 case "unmark":
 
-                    itemNumber = Integer.parseInt(inputParts[1]);
-                    Task taskUnmarked = listOfUserTasks.get(itemNumber - 1);
-                    taskUnmarked.unMark();
-                    System.out.println("Nice I have marked item number " + itemNumber + "\n" + taskUnmarked.getStatusIcon());
+                    try {
+                        if (inputParts.length > 1) {
+                            itemNumber = Integer.parseInt(inputParts[1]);
+                            Task taskUnmarked = listOfUserTasks.get(itemNumber - 1);
+                            taskUnmarked.unMarkAsDone();
+                            Ui.printBox("Nice I have marked item number " + itemNumber + "\n" + taskUnmarked.getTaskNumber() + " " + taskUnmarked.getStatusIcon());
+                        } else {
+                            throw new TwinException("Please add what item number to mark.");
+                        }
+
+
+                    } catch (NumberFormatException e) {
+                        throw new RuntimeException(e);
+                    } catch (TwinException e) {
+                        Ui.printBox(e.getMessage());
+                    }
 
                     break;
 
 
                 case "deadline":
-
-                    String taskDescription = inputParts[1] + " " + inputParts[2];
-                    String by = inputParts[4];
+                    String[] deadlineParts = userText.split(" by ");
+                    String taskDescription = deadlineParts[0].trim().substring("deadline".length());
+                    String by = deadlineParts[1];
                     Deadline deadline = new Deadline(taskDescription, by);
                     listOfUserTasks.add(deadline);
-                    Task.numberOfTasks += 1;
-                    System.out.println(deadline);
+                    Ui.printBox("Got it. I have added this event. " + "\n" + deadline);
 
                     break;
 
                 case "todo":
-                    taskDescription = inputParts[1] + " " + inputParts[2];
+
+                    taskDescription = userText.substring("todo".length());
                     Todo todo = new Todo(taskDescription);
                     listOfUserTasks.add(todo);
-                    Task.numberOfTasks += 1;
-                    System.out.println(todo);
+                    Ui.printBox("Got it. I have added this event. " + "\n" + todo);
                     System.out.println();
 
                     break;
 
                 case "event":
                     // join everything after "event" into a single string
-                    String fullInput = userText.substring(6).trim(); // remove "event "
 
-                    // find the "from" and "to" positions
-                    int fromIndex = fullInput.indexOf(" from ");
-                    int toIndex = fullInput.indexOf(" to ", fromIndex);
-
-                    if (fromIndex == -1 || toIndex == -1) {
-                        System.out.println("Invalid event format. Use: event <description> from <start> to <end>");
-                        break;
-                    }
-
-                    // extract parts
-                    taskDescription = fullInput.substring(0, fromIndex);
-                    String from = fullInput.substring(fromIndex + 6, toIndex); // +6 to skip " from "
-                    String to = fullInput.substring(toIndex + 4); // +4 to skip " to "
-
+                    String[] eventParts = userText.split(" from ");
+                    taskDescription = eventParts[0].trim().substring(5);
+                    String[] eventTimes = eventParts[1].split(" to ");
+                    String from = eventTimes[0];
+                    String to = eventTimes[1];
                     Event event = new Event(taskDescription, from, to);
                     listOfUserTasks.add(event);
-                    Task.numberOfTasks += 1;
-                    System.out.println(event);
+                    Ui.printBox("Got it. I have added this event. " + "\n" + event);
                     break;
+
                 case "delete":
                     int itemNumberToBeDeleted = Integer.parseInt(inputParts[1]);
-                    System.out.println("Noted I will delete this task: " + listOfUserTasks.get(itemNumberToBeDeleted));
-                    listOfUserTasks.remove(itemNumberToBeDeleted);
-                    System.out.println("Now you have " + listOfUserTasks.toArray().length + "tasks.");
+                    Ui.printBox("Noted I will delete this task: " + listOfUserTasks.get(itemNumberToBeDeleted - 1));
+                    listOfUserTasks.remove(itemNumberToBeDeleted-1);
+                    Ui.printBox("Now you have " + tasks.toArray().length + " tasks.");
                     break;
 
 
                 default:
-                    System.out.println("added: " + userText);
-                    Task userTask = new Task(userText);
-                    listOfUserTasks.add(userTask);
-                    Task.numberOfTasks += 1;
+                    Ui.printBox("Not allowed. Please enter an input of the correct form");
                     break;
 
                 }
-            } catch (DukeException e) {
-                System.out.println(e.getMessage());
 
-            } catch (NumberFormatException e) {
-                System.out.println("Item number must be an integer!");
             } catch (ArrayIndexOutOfBoundsException e) {
-                System.out.println("Task cannot be blank!");
+                Ui.printBox("Task cannot be blank!");
             } finally {
-                System.out.println();
-                userText = input.nextLine();
-                }
+                userText = ui.readCommand();
             }
-            System.out.println("Bye for now!");
-            StringBuilder outputToFile = new StringBuilder();
-            for (Task t : listOfUserTasks) {
-                outputToFile.append(t.toFileString()).append("\n");
-            }
-            writeToFile("C:\\Users\\ashut\\OneDrive\\Desktop\\NUS\\ip\\data\\twin.txt", outputToFile.toString());
         }
+        try {storage.writeToFile(listOfUserTasks);}
+        catch (TwinException e) {
+            Ui.printBox(e.getMessage());
+
+        }
+
+
+    }
     }
