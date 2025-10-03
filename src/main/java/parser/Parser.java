@@ -46,8 +46,8 @@ public class Parser {
                 throw new TwinException("Please add what item number to mark.");
             }
             try {
-                int idx = Integer.parseInt(args);
-                return new MarkCommand(idx);
+                int listIndex = Integer.parseInt(args);
+                return new MarkCommand(listIndex);
             } catch (NumberFormatException e) {
                 throw new TwinException("Please give me a valid number to mark!");
             }
@@ -57,8 +57,8 @@ public class Parser {
                 throw new TwinException("Please add what item number to unmark.");
             }
             try {
-                int idx = Integer.parseInt(args);
-                return new UnMarkCommand(idx);
+                int listIndex = Integer.parseInt(args);
+                return new UnMarkCommand(listIndex);
             } catch (NumberFormatException e) {
                 throw new TwinException("Please give me a valid number to unmark!");
             }
@@ -71,24 +71,24 @@ public class Parser {
 
         case "deadline":
             // require " by " and use limit 2 so description can contain "by"
-            String[] dp = trimmed.split(" by ", 2);
-            if (dp.length < 2) {
+            String[] deadlineParameters = trimmed.split(" by ", 2);
+            if (deadlineParameters.length < 2) {
                 throw new TwinException("Usage: deadline <description> by <time>");
             }
-            String dDesc = dp[0].substring("deadline".length()).trim();
-            String by = dp[1].trim();
-            if (dDesc.isEmpty() || by.isEmpty()) {
+            String deadlineDescription = deadlineParameters[0].substring("deadline".length()).trim();
+            String by = deadlineParameters[1].trim();
+            if (deadlineDescription.isEmpty() || by.isEmpty()) {
                 throw new TwinException("Usage: deadline <description> by <time>");
             }
-            return new AddDeadlineCommand(dDesc, by);
+            return new AddDeadlineCommand(deadlineDescription, by);
 
         case "event":
-            String[] ep = trimmed.split(" from ", 2);
-            if (ep.length < 2) {
+            String[] eventParameters = trimmed.split(" from ", 2);
+            if (eventParameters.length < 2) {
                 throw new TwinException("Usage: event <description> from <start> to <end>");
             }
-            String eDesc = ep[0].substring("event".length()).trim();
-            String[] times = ep[1].split(" to ", 2);
+            String eDesc = eventParameters[0].substring("event".length()).trim();
+            String[] times = eventParameters[1].split(" to ", 2);
             if (eDesc.isEmpty() || times.length < 2 || times[0].trim().isEmpty() || times[1].trim().isEmpty()) {
                 throw new TwinException("Usage: event <description> from <start> to <end>");
             }
@@ -99,8 +99,8 @@ public class Parser {
                 throw new TwinException("Please provide the task number to delete.");
             }
             try {
-                int idx = Integer.parseInt(args);
-                return new DeleteCommand(idx);
+                int listIndex = Integer.parseInt(args);
+                return new DeleteCommand(listIndex);
             } catch (NumberFormatException e) {
                 throw new TwinException("Please give me a valid number to delete!");
             }
