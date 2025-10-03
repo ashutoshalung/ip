@@ -1,17 +1,19 @@
-import task.Task;
+package task;
 
 /**
  * Represents a Deadline task, which is a type of Task with a due date/time.
  */
 public class Deadline extends Task {
-    /** The due date/time of the deadline */
+    /**
+     * The due date/time of the deadline
+     */
     protected String by;
 
     /**
      * Constructs a new Deadline with the given description and due date/time.
      *
      * @param description the description of the deadline task
-     * @param by the due date/time of the deadline
+     * @param by          the due date/time of the deadline
      */
     public Deadline(String description, String by) {
         super(description);

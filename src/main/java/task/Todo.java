@@ -1,4 +1,5 @@
-import task.Task;
+package task;
+
 /**
  * Represents a Todo task, which is a type of Task without any date/time.
  */

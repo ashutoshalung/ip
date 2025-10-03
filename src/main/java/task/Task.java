@@ -5,16 +5,24 @@ package task;
  * Tracks the description, completion status, and task number.
  */
 public class Task {
-    /** Description of the task */
+    /**
+     * Description of the task
+     */
     protected String description;
 
-    /** Status flag: 0 = not done, 1 = done */
+    /**
+     * Status flag: 0 = not done, 1 = done
+     */
     protected int isDone;
 
-    /** Counter to assign unique task numbers */
+    /**
+     * Counter to assign unique task numbers
+     */
     protected static int numberOfTasks = 0;
 
-    /** Unique number assigned to this task */
+    /**
+     * Unique number assigned to this task
+     */
     protected int taskNumber;
 
     /**

@@ -1,3 +1,5 @@
+package exception;
+
 /**
  * Custom exception class for Twin application.
  * Used to signal user-facing errors or invalid operations.
