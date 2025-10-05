@@ -73,8 +73,9 @@ todo TASK_DESCRIPTION
 
 
 **Examples:**
-todo read book
-todo buy groceries
+`todo read book`
+
+`todo buy groceries`
 
 
 ---
@@ -88,8 +89,9 @@ deadline TASK_DESCRIPTION /by DEADLINE
 
 
 **Examples:**
-deadline submit report /by Monday
-deadline return book /by 2025-10-10
+`deadline submit report /by Monday`
+
+`deadline return book /by 2025-10-10`
 
 
 
@@ -104,8 +106,9 @@ event TASK_DESCRIPTION /from START_TIME /to END_TIME
 
 
 **Examples:**
-event project meeting /from 2pm /to 4pm
-event orientation camp /from 2025-08-01 /to 2025-08-03
+`event project meeting /from 2pm /to 4pm`
+
+`event orientation camp /from 2025-08-01 /to 2025-08-03`
 
 
 ---
@@ -132,7 +135,8 @@ mark INDEX
 - The index refers to the number shown in the task list.
 
 **Example:**
-mark 1
+
+`mark 1`
 
 
 ---
@@ -145,7 +149,8 @@ Marks an existing task as **not done yet**.
 unmark INDEX
 
 **Example:**
-unmark 2
+
+`unmark 2`
 
 ---
 
@@ -158,8 +163,9 @@ delete INDEX
 
 
 **Examples:**
-list
-delete 2 (deletes the 2nd task shown in the list)
+`list`
+
+`delete 2` (deletes the 2nd task shown in the list)
 
 
 ---
@@ -169,6 +175,7 @@ delete 2 (deletes the 2nd task shown in the list)
 Exits the chatbot.
 
 **Format:**
+
 bye
 
 
