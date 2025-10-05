@@ -105,7 +105,7 @@ public class Parser {
                 throw new TwinException("Please give me a valid number to delete!");
             }
 
-        case "exit":
+        case "bye":
             Command c = new ExitCommand();
             return c;
 
