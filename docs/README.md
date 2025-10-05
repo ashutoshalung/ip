@@ -1,3 +1,45 @@
+# Twin Project Template
+
+This is a project template for a greenfield Java project, **Twin**.  
+It’s named after the concept of a “digital twin” — a task companion that helps manage your tasks efficiently.  
+Given below are instructions on how to set it up and run it.
+
+---
+
+## 🧠 Setting up in IntelliJ
+
+**Prerequisites:**
+- JDK 17
+- The latest version of IntelliJ IDEA
+
+---
+
+## 🛠 Steps
+
+1. **Open IntelliJ**  
+   If you are not on the welcome screen, click **File → Close Project** to close any existing project.
+
+2. **Open the project**
+    - Click **Open**.
+    - Select the **project directory** and click **OK**.
+    - If there are any further prompts, accept the defaults.
+
+3. **Configure the JDK**
+    - Go to **File → Project Structure → Project**.
+    - Set **Project SDK** to **JDK 17** (not any other version).
+    - Set **Project language level** to **SDK default**.
+
+4. **Run the main class**
+    - Locate the file:  
+      `src/main/java/Twin.java`
+    - Right-click it and select **Run 'Twin.main()'**.
+
+
+---
+
+
+
+
 # Twin User Guide
 
 Twin is a simple chatbot that helps you manage tasks such as **todos**, **deadlines**, and **events**.
